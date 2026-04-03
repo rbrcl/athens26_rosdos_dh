@@ -1,5 +1,6 @@
 # ROSDOS workflow cheatsheet <!-- omit in toc -->
 
+## TOC <!-- omit in toc -->
 - [Terminal basics](#terminal-basics)
 - [Sourcing Environment](#sourcing-environment)
 - [Built-in basics](#built-in-basics)
