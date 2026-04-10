@@ -9,15 +9,15 @@ from std_msgs.msg import Float32MultiArray  # Standard message type for arrays
 import serial
 
 # 2. Define the SerialPublisherNode class
-class SerialPublisherNode(Node):
+class ArduinoSerialPubNode(Node):
     def __init__(self):
         """
         Initialize the SerialPublisherNode with a publisher and serial interface.
         """
         super().__init__('arduino_serial_node')
 
-        # 3. TODO: Get Serial Configuration Values 
-        self.port = '/dev/ttyACM0'  # Serial port name
+        # 3. Get Serial Configuration Values
+        self.port = '/dev/ttyUSB0'  # Serial port name
         self.baudrate = 115200      # Baud rate for serial communication
         self.loop_frequency = 1000  # Frequency to read data from the serial port
 
@@ -64,9 +64,7 @@ class SerialPublisherNode(Node):
 
                 
                 if len(float_values) == 8:
-                    # Ensure the correct number of data parts is present (expected 8 fields)
-                    # 1. motor_position
-                    # 2. motor_velocity
+                    # Ensure the correct number of data parts is present
                     # 3. imu_acceleration_x
                     # 4. imu_acceleration_y
                     # 5. imu_acceleration_z
@@ -84,8 +82,6 @@ class SerialPublisherNode(Node):
                         float(float_values[3]),
                         float(float_values[4]),
                         float(float_values[5]),
-                        float(float_values[6]),
-                        float(float_values[7])
                     ]
 
                     # Publish the message

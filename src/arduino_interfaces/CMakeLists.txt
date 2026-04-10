@@ -8,26 +8,6 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
-
-# Declare the list of messages you want to generate:
-set(msg_files
-  "msg/STMControl.msg"
-  "msg/STMState.msg"
-)
-
-# Declare the list of services
-set(srv_files
-  "srv/STMSetControlType.srv"
-)
-
-rosidl_generate_interfaces(${PROJECT_NAME}
-  ${msg_files}
-  ${srv_files}
-  DEPENDENCIES std_msgs
-)
-
-ament_export_dependencies(rosidl_default_runtime)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

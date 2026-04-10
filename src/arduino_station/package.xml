@@ -4,7 +4,7 @@
   <name>arduino_station</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="athens@todo.todo">athens</maintainer>
+  <maintainer email="dandahojny@gmail.com">athens</maintainer>
   <license>TODO: License declaration</license>
 
   <depend>rclpy</depend>

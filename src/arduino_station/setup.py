@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'arduino_simulation'
+package_name = 'arduino_station'
 
 setup(
     name=package_name,
@@ -24,6 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'arduino_pub_node = arduino_station.arduino_serial_pub_node',
         ],
     },
 )

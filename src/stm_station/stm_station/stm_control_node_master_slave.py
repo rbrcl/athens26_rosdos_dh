@@ -12,9 +12,9 @@ from rclpy.node import Node
 
 # 1. Import necessary libraries and custom message/service types
 # TODO: Import the custom message types STMState and STMControl
-from stm_interfaces.msg import STMState, STMControl
+from arduino_interfaces.msg import STMState, STMControl
 # TODO: Import the custom service type STMSetControlType
-from stm_interfaces.srv import STMSetControlType
+from arduino_interfaces.srv import STMSetControlType
 
 # 2. Define the STMControlNode class
 class STMControlNode(Node):
@@ -22,8 +22,8 @@ class STMControlNode(Node):
         """
         Initialize the STMControlNode with parameters, publishers, subscribers, and services.
         """
-        # Initialize the ROS 2 node with a unique name 'stm_control_node'
-        super().__init__('stm_control_node')
+        # Initialize the ROS 2 node with a unique name 'arduino_control_node'
+        super().__init__('arduino_control_node')
         
         # 3. TODO:  Declare parameters 'master_group_id' and 'slave_group_id as set default values
         # 'master_group_id': ID for the master STM data topic, set the default value to 1
@@ -38,22 +38,22 @@ class STMControlNode(Node):
         self.slave_group_id = self.get_parameter('slave_group_id').get_parameter_value().integer_value
 
         # 5. TODO: Define topic names for master and slave based on group IDs obtained from parameters
-        self.master_state_topic = f'/{self.master_group_id}/master_state'  # Master stm_state topic (/group_id/stm_state)
-        self.slave_control_topic = f'/{self.slave_group_id}/slave_control' # Slave stm_control topic (/group_id/stm_control)
+        self.master_state_topic = f'/{self.master_group_id}/master_state'  # Master arduino_state topic (/group_id/arduino_state)
+        self.slave_control_topic = f'/{self.slave_group_id}/slave_control' # Slave arduino_control topic (/group_id/arduino_control)
 
         # 6. TODO: Create subscribers for STM state (master and slave)
         # Subscriber for the master node state
-        self.master_stm_state_subscriber = self.create_subscription(
+        self.master_arduino_state_subscriber = self.create_subscription(
             STMState,
             self.master_state_topic,
-            self.master_stm_state_callback,
+            self.master_arduino_state_callback,
             10
         )
         self.get_logger().info(f"Subscribed to {self.master_state_topic}")
 
         # 7. TODO: Create publishers for STM control (slave)
         # Publisher for the slave node control
-        self.slave_stm_control_publisher = self.create_publisher(
+        self.slave_arduino_control_publisher = self.create_publisher(
             STMControl,
             self.slave_control_topic,
             10
@@ -92,7 +92,7 @@ class STMControlNode(Node):
 
 
     # 14. TODO: Implement callback functions
-    def master_stm_state_callback(self, msg):
+    def master_arduino_state_callback(self, msg):
         """
         Callback activate when it is received data from the master STM state
         Updates master position.
@@ -163,7 +163,7 @@ class STMControlNode(Node):
         
         # Publish the constructed control command
         # TODO: Publish the control message
-        self.slave_stm_control_publisher.publish(control_msg)
+        self.slave_arduino_control_publisher.publish(control_msg)
 
         # Log the published command for debugging and monitoring
         self.get_logger().info(f"Published control command: {control_msg}")
@@ -176,16 +176,16 @@ def main(args=None):
     rclpy.init(args=args)
     
     # Instantiate the STMControlNode
-    stm_control_node = STMControlNode()
+    arduino_control_node = STMControlNode()
     
     # Keep the node running, processing callbacks and publishing commands
     try:
-        rclpy.spin(stm_control_node)
+        rclpy.spin(arduino_control_node)
     except KeyboardInterrupt:
         pass
     finally:
         # Clean up and shut down the node
-        stm_control_node.destroy_node()
+        arduino_control_node.destroy_node()
         rclpy.shutdown()
 
 # Entry point for running the script directly

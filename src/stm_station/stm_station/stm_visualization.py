@@ -7,7 +7,7 @@
 # Step 1: Import requiered libraries
 import rclpy                                                    # Main ROS 2 library for Python
 from rclpy.node import Node                                     # Node class to create ROS 2 nodes
-from stm_interfaces.msg import STMState                         # Custom message type for STM data
+from arduino_interfaces.msg import STMState                         # Custom message type for STM data
 from tf2_ros import TransformBroadcaster                        # ROS 2 TF broadcaster
 from tf_transformations import quaternion_from_euler            # Function to convert Euler angles to quaternions
 from geometry_msgs.msg import TransformStamped                  # Message types for TF transform and path poses
@@ -20,7 +20,7 @@ class STMVisualizationNode(Node):
         """
         Initialize the STMVisualizationNode with subscriber, transform broadcaster, and path publisher.
         """
-        super().__init__('stm_visualization_node')
+        super().__init__('arduino_visualization_node')
         
         # Step 2.1 TODO: Declare and retrieve parameters
         # 'group_id': Unique identifier for the STM node (default: 1)
@@ -28,7 +28,7 @@ class STMVisualizationNode(Node):
         self.group_id = self.get_parameter('group_id').get_parameter_value().integer_value
 
         # Step 2.2 TODO: Define topic name based on group ID for subscribing to STM data
-        input_topic = f'/stm_state'  # Input topic for STM data
+        input_topic = f'/arduino_state'  # Input topic for STM data
 
         # Step 2.3: Initialize state variables
         self.position = [0.0, 0.0, 0.0]                         # x, y, z position
@@ -43,7 +43,7 @@ class STMVisualizationNode(Node):
         self.data_subscriber = self.create_subscription(
             STMState,
             input_topic,
-            self.stm_state_callback,
+            self.arduino_state_callback,
             10
         )
 
@@ -54,7 +54,7 @@ class STMVisualizationNode(Node):
         self.get_logger().info(f"Subscribed to {input_topic} and broadcasting TF transforms and path.")
 
     # Step 3: Define the callback function for STMState messages
-    def stm_state_callback(self, msg):
+    def arduino_state_callback(self, msg):
         """
         Callback for receiving STM data, updating position and orientation, and broadcasting TF transform.
         
@@ -121,7 +121,7 @@ class STMVisualizationNode(Node):
         # Step 4.2 TODO: Set the frame details for the transform
         transform.header.stamp = self.get_clock().now().to_msg()            # Set the same timestamp as the message received from the STM
         transform.header.frame_id = 'world'                                 # Parent frame (fixed frame)
-        transform.child_frame_id = f'/group_{self.group_id}/stm_station'    # Child frame for STM serial node
+        transform.child_frame_id = f'/group_{self.group_id}/arduino_station'    # Child frame for STM serial node
 
         # Step 4.3 TODO: Set the translation (position) values
         transform.transform.translation.x = self.position[0]    # x position
@@ -152,16 +152,16 @@ def main(args=None):
     rclpy.init(args=args)
     
     # Step 5.2: Create an instance of the STMVisualizationNode
-    stm_visualization_node = STMVisualizationNode()
+    arduino_visualization_node = STMVisualizationNode()
     
     # Step 5.3: Spin the node to keep it running and processing callbacks
     try:
-        rclpy.spin(stm_visualization_node)
+        rclpy.spin(arduino_visualization_node)
     except KeyboardInterrupt:
         pass
     finally:
         # Step 5.4: Clean up and shut down the node
-        stm_visualization_node.destroy_node()
+        arduino_visualization_node.destroy_node()
         rclpy.shutdown()
 
 # Entry point for running the script directly

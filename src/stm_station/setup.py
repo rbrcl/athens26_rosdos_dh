@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 import os # Import the os module to handle paths
 from glob import glob # Import the glob module to include files using patterns
 
-package_name = 'stm_station'
+package_name = 'arduino_station'
 
 setup(
     name=package_name,
@@ -31,10 +31,10 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'stm_pub_node = stm_station.stm_serial_node_pub:main',
-            'stm_pub_sub_node = stm_station.stm_serial_node_pub_sub:main',
-            'stm_control_node = stm_station.stm_control_node_master_slave',
-            'stm_visualization_node = stm_station.stm_visualization',
+            'arduino_pub_node = arduino_station.arduino_serial_node_pub:main',
+            'arduino_pub_sub_node = arduino_station.arduino_serial_node_pub_sub:main',
+            'arduino_control_node = arduino_station.arduino_control_node_master_slave',
+            'arduino_visualization_node = arduino_station.arduino_visualization',
         ],
     },
 )

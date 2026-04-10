@@ -5,7 +5,7 @@ from ament_index_python.packages import get_package_share_directory
  
  
 def generate_launch_description():
-    share_dir = get_package_share_directory('stm_station')
+    share_dir = get_package_share_directory('arduino_station')
  
     serial_params = os.path.join(
         share_dir,
@@ -16,8 +16,8 @@ def generate_launch_description():
         
         # 1. Launch the Serial Node (The hardware bridge)
         Node(
-            package='stm_station',
-            executable='stm_pub_sub_node',
+            package='arduino_station',
+            executable='arduino_pub_sub_node',
             name='serial_node',
             parameters=[serial_params],
             output='screen'
@@ -25,8 +25,8 @@ def generate_launch_description():
 
         # 2. Launch the Control Node (The brain)
         Node(
-            package='stm_station',
-            executable='stm_control_node',
+            package='arduino_station',
+            executable='arduino_control_node',
             name='control_node',
             parameters=[
                 {'master_group_id': 1},

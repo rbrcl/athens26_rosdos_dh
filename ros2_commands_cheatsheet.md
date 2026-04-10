@@ -27,7 +27,10 @@ $ colcon build          # Build your environment
 $ cd ~/ros2_athens_ws/src
 # Create the new package
 $ ros2 pkg create --build-type ament_python first_package --dependencies rclpy std_msgs
-
+```
+```bash
+# Create interfaces package
+$ ros2 pkg create first_interfaces --build-type ament_cmake --dependencies std_msgs
 ```
 2. Build the new package:
 ```bash

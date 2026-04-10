@@ -15,7 +15,7 @@ class SerialPubSubNode(Node):
         """
         Initialize the SerialPubSubNode with publishers, subscribers, and serial interface.
         """
-        super().__init__('stm_serial_node')
+        super().__init__('arduino_serial_node')
 
         # 3. TODO: Get Serial Configuration Values 
         self.port = '/dev/ttyACM0'  # Serial port name
@@ -27,20 +27,20 @@ class SerialPubSubNode(Node):
         self.get_logger().info(f'Node initialized with serial port {self.port} at {self.baudrate} baud.')
 
         # 5. TODO: Create a publisher to publish the received data from the serial port
-        # using Float32MultiArray messages from the std_msgs package in the topic '/stm_state'
-        self.stm_state_topic = '/stm_state'
-        self.stm_state_publisher = self.create_publisher(Float32MultiArray, self.stm_state_topic, 10)
+        # using Float32MultiArray messages from the std_msgs package in the topic '/arduino_state'
+        self.arduino_state_topic = '/arduino_state'
+        self.arduino_state_publisher = self.create_publisher(Float32MultiArray, self.arduino_state_topic, 10)
 
         # 6. Create a timer to read data periodically and publish it
         self.timer = self.create_timer(1 / self.loop_frequency, self.timer_read_pub_callback)
 
         # 7. TODO: Create a subscriber to receive control commands as Float32MultiArray messages
-        # on the topic '/stm_control' with a queue size of 10 and a callback function 'stm_control_callback'
-        self.stm_control_topic = '/stm_control'
-        self.stm_control_subscriber = self.create_subscription(
+        # on the topic '/arduino_control' with a queue size of 10 and a callback function 'arduino_control_callback'
+        self.arduino_control_topic = '/arduino_control'
+        self.arduino_control_subscriber = self.create_subscription(
             Float32MultiArray,
-            self.stm_control_topic,
-            self.stm_control_callback,
+            self.arduino_control_topic,
+            self.arduino_control_callback,
             10
         )
 
@@ -105,19 +105,19 @@ class SerialPubSubNode(Node):
 
                     # Publish the message
                     # TODO: Publish the float32_multi_array_msg
-                    self.stm_state_publisher.publish(float32_multi_array_msg)
+                    self.arduino_state_publisher.publish(float32_multi_array_msg)
 
                 self.get_logger().info(f'Published data: {float_values}')
             except ValueError as e:
                 self.get_logger().warn(f'Error parsing serial data: {e}')
 
     # 8. Define the callback function for the timer
-    def stm_control_callback(self, msg):
+    def arduino_control_callback(self, msg):
         """
         Callback function for control commands.
         Sends the control data to the serial device.
         """
-        print("stm_control_callback")
+        print("arduino_control_callback")
 
         try:
             # TODO: Format the control data as a comma-separated string and send it to the serial device
